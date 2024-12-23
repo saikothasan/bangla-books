@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import SearchBar from "../components/SearchBar";
+import { SearchResult } from "../types/SearchResult";
 
 export default function SearchPage() {
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
@@ -101,49 +102,6 @@ export default function SearchPage() {
               </div>
             ))}
           </div>
-          <div className="mt-6 flex justify-between">
-            {page > 1 && (
-              <button
-                onClick={() => {
-                  setPage((prev) => prev - 1);
-                  handleSearch(query, (page - 2) * 10 + 1);
-                }}
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"
-              >
-                Previous
-              </button>
-            )}
-            {results.length > 0 && (
-              <button
-                onClick={() => {
-                  setPage((prev) => prev + 1);
-                  handleSearch(query, page * 10 + 1);
-                }}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-              >
-                Next
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-      {savedLinks.length > 0 && (
-        <div className="mt-10">
-          <h2 className="text-2xl font-bold text-blue-800 mb-4">Saved Links</h2>
-          <ul className="list-disc ml-6">
-            {savedLinks.map((link, index) => (
-              <li key={index}>
-                <a
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  {link}
-                </a>
-              </li>
-            ))}
-          </ul>
         </div>
       )}
     </div>
