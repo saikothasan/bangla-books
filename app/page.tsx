@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import SearchBar from "../../components/SearchBar";
-import { fetchBooks } from "../../lib/fetchBooks";
+import SearchBar from "../components/SearchBar";
+import { fetchBooks } from "../lib/fetchBooks";
 
 export default function SearchPage() {
   const [links, setLinks] = useState<string[]>([]);
