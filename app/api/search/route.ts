@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 
-const API_KEY = "YOUR_GOOGLE_API_KEY"; // Replace with your API key
+const API_KEY = "AIzaSyCuwzmVBBT060Pb6QJtW_wwCow_M-sctdw"; // Replace with your API key
 const CX = "c711b8d7a556e47d6"; // Replace with your Search Engine ID
 
 export async function GET(request: Request) {
