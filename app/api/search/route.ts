@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
-import cheerio from "cheerio";
 
-// API function to fetch PDF links
+const API_KEY = "YOUR_GOOGLE_API_KEY"; // Replace with your API key
+const CX = "YOUR_SEARCH_ENGINE_ID"; // Replace with your Search Engine ID
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get("query");
@@ -14,32 +15,25 @@ export async function GET(request: Request) {
     );
   }
 
-  const dork = `${query} filetype:pdf`;
-  const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(dork)}`;
-
   try {
-    const { data } = await axios.get(searchUrl, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36",
-      },
-    });
-
-    const $ = cheerio.load(data);
-    const links: string[] = [];
-
-    $("a").each((_, element) => {
-      const href = $(element).attr("href");
-      if (href && href.includes("http") && href.includes(".pdf")) {
-        links.push(href.split("&")[0].replace("/url?q=", ""));
+    const response = await axios.get(
+      `https://www.googleapis.com/customsearch/v1`,
+      {
+        params: {
+          key: API_KEY,
+          cx: CX,
+          q: query,
+          fileType: "pdf", // Optional: Restrict results to PDFs
+          num: 10, // Number of results per request (max 10)
+        },
       }
-    });
+    );
 
-    return NextResponse.json({ links });
+    return NextResponse.json(response.data);
   } catch (error) {
-    console.error("Error fetching books:", error);
+    console.error("Error fetching search results:", error);
     return NextResponse.json(
-      { error: "Failed to fetch PDF links" },
+      { error: "Failed to fetch search results" },
       { status: 500 }
     );
   }
