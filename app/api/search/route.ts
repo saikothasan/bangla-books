@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 
 const API_KEY = "YOUR_GOOGLE_API_KEY"; // Replace with your API key
-const CX = "YOUR_SEARCH_ENGINE_ID"; // Replace with your Search Engine ID
+const CX = "c711b8d7a556e47d6"; // Replace with your Search Engine ID
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
