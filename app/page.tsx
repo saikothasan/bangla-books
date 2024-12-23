@@ -7,25 +7,21 @@ import { SearchResult } from "../types/SearchResult";
 export default function SearchPage() {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
   const [history, setHistory] = useState<string[]>([]);
-  const [savedLinks, setSavedLinks] = useState<string[]>([]);
 
-  const handleSearch = async (searchQuery: string, startIndex: number = 1) => {
+  const handleSearch = async (searchQuery: string) => {
     setLoading(true);
     setResults([]);
-    setQuery(searchQuery);
 
     try {
       const response = await fetch(
-        `/api/search?query=${encodeURIComponent(searchQuery)}&start=${startIndex}`
+        `/api/search?query=${encodeURIComponent(searchQuery)}`
       );
       const data = await response.json();
 
       if (response.ok) {
         setResults(data.items || []);
-        setHistory((prev) => [...new Set([searchQuery, ...prev])]); // Save query in history
+        setHistory((prev) => [...new Set([searchQuery, ...prev])]);
       } else {
         console.error(data.error);
         alert("Error: " + data.error);
@@ -36,10 +32,6 @@ export default function SearchPage() {
     }
 
     setLoading(false);
-  };
-
-  const saveLink = (link: string) => {
-    setSavedLinks((prev) => [...new Set([...prev, link])]);
   };
 
   return (
@@ -93,12 +85,6 @@ export default function SearchPage() {
                     {item.displayLink}
                   </a>
                 </p>
-                <button
-                  onClick={() => saveLink(item.link)}
-                  className="mt-2 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition"
-                >
-                  Save
-                </button>
               </div>
             ))}
           </div>
