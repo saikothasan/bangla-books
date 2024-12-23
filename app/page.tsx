@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import SearchBar from "../components/SearchBar";
-import { fetchBooks } from "../lib/fetchBooks";
 
 export default function SearchPage() {
   const [links, setLinks] = useState<string[]>([]);
@@ -10,8 +9,23 @@ export default function SearchPage() {
 
   const handleSearch = async (query: string) => {
     setLoading(true);
-    const results = await fetchBooks(query);
-    setLinks(results);
+    setLinks([]); // Clear previous results
+
+    try {
+      const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        setLinks(data.links);
+      } else {
+        console.error(data.error);
+        alert("Error: " + data.error);
+      }
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+      alert("Failed to fetch search results.");
+    }
+
     setLoading(false);
   };
 
